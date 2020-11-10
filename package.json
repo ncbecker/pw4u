@@ -1,0 +1,24 @@
+{
+  "name": "pw4u",
+  "version": "1.0.0",
+  "description": "Password Manager based on Node.js",
+  "main": "app.js",
+  "private": true,
+  "dependencies": {
+    "inquirer": "^7.3.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lmachens/pw4u.git"
+  },
+  "author": "Leon Machens",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lmachens/pw4u/issues"
+  },
+  "homepage": "https://github.com/lmachens/pw4u#readme"
+}
