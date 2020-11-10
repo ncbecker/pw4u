@@ -1,11 +1,8 @@
 const inquirer = require("inquirer");
+const fs = require("fs").promises;
 
 console.log("PW4U");
 
-const passwordSafe = {
-  wifi: "123",
-  gmail: "321",
-};
 const secretMasterPassword = "baum";
 
 const questions = [
@@ -18,6 +15,9 @@ const questions = [
 
 async function validateAccess() {
   const { masterPassword } = await inquirer.prompt(questions);
+
+  const passwordSafeJSON = await fs.readFile("./db.json", "utf8");
+  const passwordSafe = JSON.parse(passwordSafeJSON);
 
   if (masterPassword !== secretMasterPassword) {
     console.error("You are not welcome here! 👿");
