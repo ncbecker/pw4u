@@ -2,11 +2,12 @@ const inquirer = require("inquirer");
 
 console.log("PW4U");
 
-const args = process.argv.slice(2);
-const passwordName = args[0];
-console.log(`You want to know the password of '${passwordName}'`);
-
+const passwordSafe = {
+  wifi: "123",
+  gmail: "321",
+};
 const secretMasterPassword = "baum";
+
 const questions = [
   {
     type: "input",
@@ -24,8 +25,13 @@ async function validateAccess() {
     return;
   }
 
-  if (passwordName === "caro") {
-    console.log("Password is honigblume");
+  const args = process.argv.slice(2);
+  const passwordName = args[0];
+  console.log(`You want to know the password of '${passwordName}'`);
+
+  const password = passwordSafe[passwordName];
+  if (password) {
+    console.log(`Password is ${password}`);
   } else {
     console.log("Unknown password");
   }
