@@ -27,13 +27,20 @@ async function validateAccess() {
 
   const args = process.argv.slice(2);
   const passwordName = args[0];
-  console.log(`You want to know the password of '${passwordName}'`);
+  const newPasswordValue = args[1];
 
-  const password = passwordSafe[passwordName];
-  if (password) {
-    console.log(`Password is ${password}`);
+  if (newPasswordValue) {
+    passwordSafe[passwordName] = newPasswordValue;
+    fs.writeFile("./db.json", JSON.stringify(passwordSafe, null, 2));
   } else {
-    console.log("Unknown password");
+    console.log(`You want to know the password of '${passwordName}'`);
+
+    const password = passwordSafe[passwordName];
+    if (password) {
+      console.log(`Password is ${password}`);
+    } else {
+      console.log("Unknown password");
+    }
   }
 }
 
