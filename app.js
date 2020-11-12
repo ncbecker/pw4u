@@ -1,47 +1,29 @@
-const inquirer = require("inquirer");
-const fs = require("fs").promises;
+const { readCommandLineArguments } = require("./lib/commandLine");
+const { getPassword } = require("./lib/passwords");
+const { askForMasterPassword } = require("./lib/questions");
+const { isMasterPasswordCorrect } = require("./lib/validation");
 
-console.log("PW4U");
+async function run() {
+  const masterPassword = await askForMasterPassword();
 
-const secretMasterPassword = "baum";
-
-const questions = [
-  {
-    type: "input",
-    name: "masterPassword",
-    message: "What is the super secret master password?",
-  },
-];
-
-async function validateAccess() {
-  const { masterPassword } = await inquirer.prompt(questions);
-
-  const passwordSafeJSON = await fs.readFile("./db.json", "utf8");
-  const passwordSafe = JSON.parse(passwordSafeJSON);
-
-  if (masterPassword !== secretMasterPassword) {
-    console.error("You are not welcome here! 👿");
-    validateAccess();
-    return;
+  if (!isMasterPasswordCorrect(masterPassword)) {
+    console.error("You are not welcome here! 👿 Try again!");
+    return run();
   }
 
-  const args = process.argv.slice(2);
-  const passwordName = args[0];
-  const newPasswordValue = args[1];
+  const [passwordName, newPasswordValue] = readCommandLineArguments();
+  if (!passwordName) {
+    console.error("Missing password name!");
+    return process.exit(9);
+  }
 
   if (newPasswordValue) {
-    passwordSafe[passwordName] = newPasswordValue;
-    fs.writeFile("./db.json", JSON.stringify(passwordSafe, null, 2));
+    await setPassword(passwordName, newPasswordValue);
+    console.log(`Password ${passwordName} set 🎉`);
   } else {
-    console.log(`You want to know the password of '${passwordName}'`);
-
-    const password = passwordSafe[passwordName];
-    if (password) {
-      console.log(`Password is ${password}`);
-    } else {
-      console.log("Unknown password");
-    }
+    const passwordValue = await getPassword(passwordName);
+    console.log(`Your password is ${passwordValue} 🎉`);
   }
 }
 
-validateAccess();
+run();
