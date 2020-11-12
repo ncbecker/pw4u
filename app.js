@@ -1,5 +1,5 @@
 const { readCommandLineArguments } = require("./lib/commandLine");
-const { getPassword } = require("./lib/passwords");
+const { getPassword, setPassword } = require("./lib/passwords");
 const { askForMasterPassword } = require("./lib/questions");
 const { isMasterPasswordCorrect } = require("./lib/validation");
 
