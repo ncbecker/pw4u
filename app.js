@@ -1,9 +1,17 @@
 const { readCommandLineArguments } = require("./lib/commandLine");
+const { connect, close } = require("./lib/database");
 const { getPassword, setPassword } = require("./lib/passwords");
 const { askForMasterPassword } = require("./lib/questions");
 const { isMasterPasswordCorrect } = require("./lib/validation");
 
 async function run() {
+  console.log("Connecting to database...");
+  await connect(
+    "mongodb+srv://leon:9MkwXXRt3qB3vCxN@cluster0.912k3.mongodb.net/pw4u?retryWrites=true&w=majority",
+    "pw4u"
+  );
+  console.log("Connected to database 🎉");
+
   const masterPassword = await askForMasterPassword();
 
   if (!(await isMasterPasswordCorrect(masterPassword))) {
@@ -24,6 +32,7 @@ async function run() {
     const passwordValue = await getPassword(passwordName);
     console.log(`Your password is ${passwordValue} 🎉`);
   }
+  await close();
 }
 
 run();
