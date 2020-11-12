@@ -1,12 +1,12 @@
 const { readCommandLineArguments } = require("./lib/commandLine");
-const { getPassword } = require("./lib/passwords");
+const { getPassword, setPassword } = require("./lib/passwords");
 const { askForMasterPassword } = require("./lib/questions");
 const { isMasterPasswordCorrect } = require("./lib/validation");
 
 async function run() {
   const masterPassword = await askForMasterPassword();
 
-  if (!isMasterPasswordCorrect(masterPassword)) {
+  if (!(await isMasterPasswordCorrect(masterPassword))) {
     console.error("You are not welcome here! 👿 Try again!");
     return run();
   }
