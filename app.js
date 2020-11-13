@@ -1,16 +1,19 @@
+const kleur = require("kleur");
 const { readCommandLineArguments } = require("./lib/commandLine");
 const { connect, close } = require("./lib/database");
 const { getPassword, setPassword } = require("./lib/passwords");
 const { askForMasterPassword } = require("./lib/questions");
 const { isMasterPasswordCorrect } = require("./lib/validation");
+require("dotenv").config();
 
 async function run() {
   console.log("Connecting to database...");
-  await connect(
-    "mongodb+srv://leon:9MkwXXRt3qB3vCxN@cluster0.912k3.mongodb.net/pw4u?retryWrites=true&w=majority",
-    "pw4u"
-  );
+
+  await connect(process.env.DB_URL, process.env.DB_NAME);
+
   console.log("Connected to database 🎉");
+
+  const [passwordName, newPasswordValue] = readCommandLineArguments();
 
   const masterPassword = await askForMasterPassword();
 
@@ -19,7 +22,6 @@ async function run() {
     return run();
   }
 
-  const [passwordName, newPasswordValue] = readCommandLineArguments();
   if (!passwordName) {
     console.error("Missing password name!");
     return process.exit(9);
